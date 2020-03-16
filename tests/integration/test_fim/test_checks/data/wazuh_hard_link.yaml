@@ -1,14 +1,15 @@
 ---
 - apply_to_modules:
   - test_hard_link
-  section: syscheck
-  elements:
-  - disabled:
-      value: 'no'
-  - frequency:
-      value: FREQUENCY
-  - directories:
-      value: "/testdir1"
-      attributes:
-      - FIM_MODE
-      - INODE
+  sections:
+  - section: syscheck
+    elements:
+    - disabled:
+        value: 'no'
+    - frequency:
+        value: FREQUENCY
+    - directories:
+        value: "/testdir1"
+        attributes:
+        - FIM_MODE
+        - INODE
