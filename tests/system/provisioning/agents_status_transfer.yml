@@ -11,7 +11,7 @@
           - inventory_hostname in groups['masters']
 
       - name: cat summary.json file
-        shell: cat /home/jenkins-staging/workspace/Test_system_reporting/qa/tests/system/provisioning/agents_status/fim_test_results/summary.json
+        shell: cat ./agents_status/fim_test_results/summary.json
         register: cat_content_file
         when:
           - inventory_hostname in groups['masters']
