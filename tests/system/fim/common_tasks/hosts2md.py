@@ -31,7 +31,7 @@ def endpoints_set(dict):
                 del value3['passed']
                 for key4, value4 in value3.items():
                     for key5, value5 in value4.items():
-                        line = key5 + ' - (' + value5['os'] + value5['distribution'] + ')'
+                        line = key5 + ' (' + value5['os'] + value5['distribution'] + ')'
                         endpoints_list.append(line)
     return set(endpoints_list)
 
