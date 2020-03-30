@@ -39,7 +39,7 @@ def endpoints_set(dict):
 def set_to_md(agents):
     md_output = ''
     for element in agents:
-        md_output += "" - **"" + element + "** \n"
+        md_output += " - **" + element + "** \n"
     return md_output
 
 def final_summarize():
