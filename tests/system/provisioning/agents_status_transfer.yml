@@ -9,27 +9,3 @@
           dest: ./agents_status
         when:
           - inventory_hostname in groups['masters']
-
-      - name: ls agent statud directory
-        shell: ls -lah ./agents_status/fim_test_results/
-        register: ls_content
-        when:
-          - inventory_hostname in groups['masters']
-
-      - name: echo file
-        debug:
-          msg: "{{ ls_content.stdout }}"
-        when:
-          - inventory_hostname in groups['masters']
-
-      - name: cat summary.json file
-        shell: cat ./agents_status/fim_test_results/summary.json
-        register: cat_content_file
-        when:
-          - inventory_hostname in groups['masters']
-
-      - name: echo file
-        debug:
-          msg: "{{ cat_content_file.stdout }}"
-        when:
-          - inventory_hostname in groups['masters']
