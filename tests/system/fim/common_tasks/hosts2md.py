@@ -40,7 +40,7 @@ def set_to_md(agents):
     md_output = ''
     for element in agents:
         md_output += ' - **' + element + '** \n'
-    return repr(md_output)
+    return md_output
 
 def final_summarize():
     json_dict = read_verify_json()
