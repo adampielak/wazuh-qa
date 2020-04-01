@@ -45,9 +45,9 @@ def endpoints_set(dict):
 def host2markdown(name, jsonObject):
     host_data = ""
     if jsonObject['passed'] == True:
-        return " - {} - {} \n".format(name, 'OK')
+        return " - {} - {} \n".format(name, '[✓]')
     else:
-        host_data = " - {} - {} \n".format(name, 'NOT OK')
+        host_data = " - {} - {} \n".format(name, '[ERROR]')
         host_data += "``` \n"
         for key, value in jsonObject.items():
             host_data += "    - {} : {} \n".format(key, str(value))
@@ -57,10 +57,10 @@ def host2markdown(name, jsonObject):
 def event2markdown(event, hosts, passed):
     result=''
     if passed == True:
-        result = "**Event: {} - {}**\n".format(event, 'OK')
+        result = "**Event: {} - {}**\n".format(event, '[✓]')
         return result
     else:
-        result = "**Event: {} - {}**\n".format(event, 'NOT OK')
+        result = "**Event: {} - {}**\n".format(event, '[ERROR]')
         for host, json_dict in hosts.items():
             result += host2markdown(host, json_dict)
         return result
@@ -75,13 +75,13 @@ def scenario2markdown(scenario_name, scenario_content):
     result = "### {} :x:\n".format(scenario_name)
     for verification, test_results in scenario_content['errors'].items():
         if verification == 'elasticsearch':
-            result += "#### {}".format('Elasticsearch alerts verification')
+            result += "### {}".format('Elasticsearch alerts verification')
         else:
-            result += "#### {}".format('alerts.json alerts  verification')
+            result += "### {}".format('alerts.json alerts  verification')
         if test_results['passed'] == True:
-            result += " - OK \n"
+            result += " - [✓] \n"
         else:
-            result += " - NOT OK \n"
+            result += " - [ERROR] \n"
             del test_results['passed']
             for event, event_content in test_results.items():
                 result += event2markdown(event, event_content['hosts'], event_content['passed']) + "\n"
