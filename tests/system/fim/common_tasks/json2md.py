@@ -19,20 +19,26 @@ def read_summary_json():
 
 
 def host2markdown(name, jsonObject):
-    line = "#### {} \n".format(name)
+    host_data = ""
     if jsonObject['passed'] == True:
-        line += " - {} : {} \n".format('passed', 'True')
+        return "#### - {} - {} \n".format(name, 'OK')
     else:
+        host_data = "#### - {} - {} \n".format(name, 'NOT OK')
         for key, value in jsonObject.items():
-            line += " - {} : {} \n".format(key, str(value))
-    return line
+            host_data += "    - {} : {} \n".format(key, str(value))
+    return host_data
 
 
-def event2markdown(event, hosts):
-    result = "**Event: {}**\n".format(event)
-    for host, json_dict in hosts.items():
-        result += host2markdown(host, json_dict)
-    return result
+def event2markdown(event, hosts, passed):
+    result=''
+    if passed == True:
+        result = "**Event: {} - {}**\n".format(event, 'OK')
+        return result
+    else:
+        result = "**Event: {} - {}**\n".format(event, 'NOT OK')
+        for host, json_dict in hosts.items():
+            result += host2markdown(host, json_dict)
+        return result
 
 
 def scenario2markdown(scenario_name, scenario_content):
@@ -43,10 +49,17 @@ def scenario2markdown(scenario_name, scenario_content):
         return "### {} :heavy_check_mark:\n***\n".format(scenario_name)
     result = "### {} :x:\n".format(scenario_name)
     for verification, test_results in scenario_content['errors'].items():
-        result += "### {}\n".format(verification)
-        del test_results['passed']
-        for event, event_content in test_results.items():
-            result += event2markdown(event, event_content['hosts'])
+        if verification == 'elasticsearch':
+            result += "### {}".format('Elasticsearch alerts verification')
+        else:
+            result += "### {}".format('alerts.json alerts  verification')
+        if test_results['passed'] == True:
+            result += " - OK \n"
+        else:
+            result += " - NOT OK \n"
+            del test_results['passed']
+            for event, event_content in test_results.items():
+                result += event2markdown(event, event_content['hosts'], event_content['passed']) + "\n"
     return result + "***\n"
 
 
