@@ -20,8 +20,11 @@ def read_summary_json():
 
 def host2markdown(name, jsonObject):
     line = "#### {} \n".format(name)
-    for key, value in jsonObject.items():
-        line += " - {} : {} \n".format(key, str(value))
+    if jsonObject['passed'] == True:
+        line += " - {} : {} \n".format('passed', 'True')
+    else:
+        for key, value in jsonObject.items():
+            line += " - {} : {} \n".format(key, str(value))
     return line
 
 
