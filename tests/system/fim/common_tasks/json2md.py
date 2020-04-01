@@ -10,20 +10,25 @@
 
 import json
 
-
 def read_summary_json():
     path = "/opt/fim_test_results/summary.json"
     with open(path, "r") as f:
         json_dict = json.load(f)
     return json_dict
 
+def read_verify_json():
+    path = "/opt/fim_test_results/result_json.json"
+    with open(path, "r") as f:
+        json_dict = json.load(f)
+    assert('alerts_json_verification' in json_dict)
+    return json_dict['alerts_json_verification']
 
 def host2markdown(name, jsonObject):
     host_data = ""
     if jsonObject['passed'] == True:
-        return "#### - {} - {} \n".format(name, 'OK')
+        return " - {} - {} \n".format(name, 'OK')
     else:
-        host_data = "#### - {} - {} \n".format(name, 'NOT OK')
+        host_data = " - {} - {} \n".format(name, 'NOT OK')
         for key, value in jsonObject.items():
             host_data += "    - {} : {} \n".format(key, str(value))
     return host_data
@@ -32,10 +37,10 @@ def host2markdown(name, jsonObject):
 def event2markdown(event, hosts, passed):
     result=''
     if passed == True:
-        result = '**Event {} - <div class="text-red mb-2">{}</div>**\n'.format(event, 'OK')
+        result = "**Event: {} - {}**\n".format(event, 'OK')
         return result
     else:
-        result = '**Event {} - <div class="text-green mb-2 ml-4">{}</div>**\n'.format(event, 'NOT OK')
+        result = "**Event: {} - {}**\n".format(event, 'NOT OK')
         for host, json_dict in hosts.items():
             result += host2markdown(host, json_dict)
         return result
@@ -50,9 +55,9 @@ def scenario2markdown(scenario_name, scenario_content):
     result = "### {} :x:\n".format(scenario_name)
     for verification, test_results in scenario_content['errors'].items():
         if verification == 'elasticsearch':
-            result += "### {}".format('Elasticsearch alerts verification')
+            result += "#### {}".format('Elasticsearch alerts verification')
         else:
-            result += "### {}".format('alerts.json alerts  verification')
+            result += "#### {}".format('alerts.json alerts  verification')
         if test_results['passed'] == True:
             result += " - OK \n"
         else:
@@ -63,8 +68,9 @@ def scenario2markdown(scenario_name, scenario_content):
     return result + "***\n"
 
 
-def json2markdown(summary_json):
+def json2markdown(summary_json, verify_json):
     result = ""
+    result += endpoints_set(verify_json) + "\n"
     for scenario, content in summary_json.items():
         result += scenario2markdown(scenario, content)
     return result
@@ -80,6 +86,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     out_path = args.output_file
     summary_json = read_summary_json()
-    printable_summary = json2markdown(summary_json)
+    verify_json = read_verify_json()
+    printable_summary = json2markdown(summary_json,verify_json)
     with open(out_path, "w") as f:
         f.write(printable_summary)
