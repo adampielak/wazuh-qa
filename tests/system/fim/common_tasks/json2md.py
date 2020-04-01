@@ -32,10 +32,10 @@ def host2markdown(name, jsonObject):
 def event2markdown(event, hosts, passed):
     result=''
     if passed == True:
-        result = "**Event: {} - {}**\n".format(event, 'OK')
+        result = '**Event {} - <div class="text-red mb-2">{}</div>**\n'.format(event, 'OK')
         return result
     else:
-        result = "**Event: {} - {}**\n".format(event, 'NOT OK')
+        result = '**Event {} - <div class="text-green mb-2 ml-4">{}</div>**\n'.format(event, 'NOT OK')
         for host, json_dict in hosts.items():
             result += host2markdown(host, json_dict)
         return result
