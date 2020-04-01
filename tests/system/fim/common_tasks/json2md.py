@@ -36,10 +36,10 @@ def endpoints_set(dict):
                     for key5, value5 in value4.items():
                         line = "{} ({} {})".format(key5,value5['os'],value5['distribution'])
                         endpoints_list.append(line)
-    endpoints_list = "**Agents endpoints:** \n"
+    endpoints = "**Agents - OS list:** \n"
     for element in set(endpoints_list):
-        endpoints_list += " - {} \n".format(element)
-    return endpoints_list
+        endpoints += " - {} \n".format(element)
+    return endpoints
 
 
 def host2markdown(name, jsonObject):
@@ -48,10 +48,11 @@ def host2markdown(name, jsonObject):
         return " - {} - {} \n".format(name, 'OK')
     else:
         host_data = " - {} - {} \n".format(name, 'NOT OK')
+        host_data += "``` \n"
         for key, value in jsonObject.items():
             host_data += "    - {} : {} \n".format(key, str(value))
+        host_data += "``` \n"
     return host_data
-
 
 def event2markdown(event, hosts, passed):
     result=''
