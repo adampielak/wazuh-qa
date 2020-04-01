@@ -23,6 +23,25 @@ def read_verify_json():
     assert('alerts_json_verification' in json_dict)
     return json_dict['alerts_json_verification']
 
+
+def endpoints_set(dict):
+    endpoints_list = []
+    del dict['passed']
+    for key1, value1 in dict.items():
+        for key2, value2 in value1.items():
+            del value2['passed']
+            for key3, value3 in value2.items():
+                del value3['passed']
+                for key4, value4 in value3.items():
+                    for key5, value5 in value4.items():
+                        line = "{} ({} {})".format(key5,value5['os'],value5['distribution'])
+                        endpoints_list.append(line)
+    endpoints_list = "**Agents endpoints:** \n"
+    for element in set(endpoints_list):
+        endpoints_list += " - {} \n".format(element)
+    return endpoints_list
+
+
 def host2markdown(name, jsonObject):
     host_data = ""
     if jsonObject['passed'] == True:
