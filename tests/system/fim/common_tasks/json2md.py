@@ -99,12 +99,13 @@ def scenario2markdown(scenario_name, scenario_content):
     if scenario_content['state'] == 'SUCCESS':
         return "### {} :heavy_check_mark:\n***\n".format(scenario_name)
     result = "### {} :x:\n".format(scenario_name)
+    result += '<details><summary>Advanced details</summary> \n'
     result += "Applicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
         if verification == 'elasticsearch':
             result += "#### - {}".format('Elasticsearch alerts verification')
         else:
-            result += "#### - {}".format('alerts.json alerts verification')
+            result += "#### - {}".format('alerts.json alerts  verification')
         if test_results['passed'] == True:
             result += " - [✓] \n"
         else:
@@ -112,7 +113,7 @@ def scenario2markdown(scenario_name, scenario_content):
             del test_results['passed']
             for event, event_content in test_results.items():
                 result += event2markdown(event, event_content['hosts'], event_content['passed']) + "\n"
-    return result + "***\n"
+    return result + "***\n\n </details> \n "
 
 def get_config(scenario_name):
     config =""
