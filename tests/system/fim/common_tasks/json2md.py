@@ -62,7 +62,7 @@ def endpoints_set(dict):
                     for key5, value5 in value4.items():
                         line = "{} ({} {})".format(key5,value5['os'],value5['distribution'])
                         endpoints_list.append(line)
-    endpoints = "**Agents - OS list:** \n"
+    endpoints = "### Agents - OS list: \n"
     for element in sorted(set(endpoints_list)):
         endpoints += " - {} \n".format(element)
     return endpoints
@@ -99,12 +99,12 @@ def scenario2markdown(scenario_name, scenario_content):
     result = ""
     if scenario_content['state'] == 'SUCCESS':
         # result += "### • {} :heavy_check_mark:\n".format(scenario_name)
-        result += "### ◙ {} :heavy_check_mark:\n".format(scenario_switcher(scenario_name),'[✓]')
+        result += "###{} :heavy_check_mark:\n".format(scenario_switcher(scenario_name),'[✓]')
         result += "<details><summary>Advanced details</summary>"
         result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
         return result + "\n</details> \n "
     # result = "\n### • {} :x:\n".format(scenario_name)
-    result += "\n### ◙ {} :x:\n".format(scenario_switcher(scenario_name),'[ERROR]')
+    result += "\n###{} :x:\n".format(scenario_switcher(scenario_name),'[ERROR]')
     result += "<details><summary>Advanced details</summary>"
     result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
