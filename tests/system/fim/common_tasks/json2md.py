@@ -23,6 +23,31 @@ def read_verify_json():
     assert('alerts_json_verification' in json_dict)
     return json_dict['alerts_json_verification']
 
+def scenario_switcher(scenario):
+    switcher = {
+                "201_default_configuration_frequency": '[201](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#201---default-syscheck-configuration-linuxwindows-480) - Default syscheck configuration',
+                "202_realtime_monitoring": '[202](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#202---real-time-monitoring---add-linuxwindows-531) - Real time monitoring',
+                "203_whodata_frequency": '[203](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#203---whodata-linuxwindows-528) - Whodata',
+                "204_whodata_linux_noaudit": '[204](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#204---whodata-linux---no-audit-installed-520) - Whodata (no audit)',
+                "205_restrict_option": '[205](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#205---use-of-restrict-option-linuxwindows-526) - Restrict option',
+                "206_tag_option": '[206](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#206---use-of-tags-linuxwindows-524) - Tags usage',
+                "207_report_changes_frequency": '[207](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#207---use-of--report-changes-linuxwindows-523) - Report changes',
+                "208_ignore_files": '[208](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#208---use-of-ignore-files-linuxwindows-538) - Ignore files',
+                "209_recursion_level": '[209](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#209---recursion-level-540) - Recursion level',
+                "210_scheduled_scan": '[210](https://github.com/wazuh/wazuh-qa/wiki/FIM-System-tests:-Scenarios-list#210---scheduled-scan-553) - Scheduled scan'
+    }
+    return switcher.get(scenario,scenario)
+
+
+def scenarioslist(summary_json):
+    scenarioslist = "**Scenarios summary:** \n"
+    for scenario, content in summary_json.items():
+        if content['state'] == 'SUCCESS':
+            scenarioslist += "- {} - {} \n".format(scenario_switcher(scenario),'[✓]')
+        else:
+            scenarioslist += "- {} - {} \n".format(scenario_switcher(scenario),'[ERROR]')
+    return scenarioslist
+
 
 def endpoints_set(dict):
     endpoints_list = []
@@ -37,7 +62,7 @@ def endpoints_set(dict):
                         line = "{} ({} {})".format(key5,value5['os'],value5['distribution'])
                         endpoints_list.append(line)
     endpoints = "**Agents - OS list:** \n"
-    for element in set(endpoints_list):
+    for element in sorted(set(endpoints_list)):
         endpoints += " - {} \n".format(element)
     return endpoints
 
@@ -45,9 +70,9 @@ def endpoints_set(dict):
 def host2markdown(name, jsonObject):
     host_data = ""
     if jsonObject['passed'] == True:
-        return " - {} - {} \n".format(name, '[✓]')
+        return "    - {} - {} \n".format(name, '[✓]')
     else:
-        host_data = " - {} - {} \n".format(name, '[ERROR]')
+        host_data = "    - {} - {} \n".format(name, '[ERROR]')
         host_data += "``` \n"
         for key, value in jsonObject.items():
             host_data += "    - {} : {} \n".format(key, str(value))
@@ -57,10 +82,10 @@ def host2markdown(name, jsonObject):
 def event2markdown(event, hosts, passed):
     result=''
     if passed == True:
-        result = "**Event: {} - {}**\n".format(event, '[✓]')
+        result = '**  - Event {} - {}**\n'.format(event, '[✓]')
         return result
     else:
-        result = "**Event: {} - {}**\n".format(event, '[ERROR]')
+        result = '**  - Event {} - {}**\n'.format(event, '[ERROR]')
         for host, json_dict in hosts.items():
             result += host2markdown(host, json_dict)
         return result
@@ -73,11 +98,12 @@ def scenario2markdown(scenario_name, scenario_content):
     if scenario_content['state'] == 'SUCCESS':
         return "### {} :heavy_check_mark:\n***\n".format(scenario_name)
     result = "### {} :x:\n".format(scenario_name)
+    result += "Applicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
         if verification == 'elasticsearch':
-            result += "### {}".format('Elasticsearch alerts verification')
+            result += "#### - {}".format('Elasticsearch alerts verification')
         else:
-            result += "### {}".format('alerts.json alerts  verification')
+            result += "#### - {}".format('alerts.json alerts verification')
         if test_results['passed'] == True:
             result += " - [✓] \n"
         else:
@@ -87,10 +113,26 @@ def scenario2markdown(scenario_name, scenario_content):
                 result += event2markdown(event, event_content['hosts'], event_content['passed']) + "\n"
     return result + "***\n"
 
+def get_config(scenario_name):
+    config =""
+    with open('../scenarios/'+ scenario_name + '/config/agent_linux_ossec_deb.conf', 'r') as f:
+        lines = f.readlines()
+        for line in lines:
+            if re.search(r'frequency', line):
+                config += line
+            if re.search(r'fim_testing', line):
+                config += line
+            if scenario_name == '208_ignore_files':
+                if re.search(r'mp3', line):
+                    config += line
+    return config
+
 
 def json2markdown(summary_json, verify_json):
     result = ""
+    result += scenarioslist(summary_json) + "\n"
     result += endpoints_set(verify_json) + "\n"
+    result += "### Detailed report: \n"
     for scenario, content in summary_json.items():
         result += scenario2markdown(scenario, content)
     return result
