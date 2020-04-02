@@ -99,12 +99,12 @@ def scenario2markdown(scenario_name, scenario_content):
     result = ""
     if scenario_content['state'] == 'SUCCESS':
         # result += "### • {} :heavy_check_mark:\n".format(scenario_name)
-        result += "• {} :heavy_check_mark:\n".format(scenario_switcher(scenario_name),'[✓]')
+        result += "### ◙ {} :heavy_check_mark:\n".format(scenario_switcher(scenario_name),'[✓]')
         result += "<details><summary>Advanced details</summary>"
         result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
         return result + "\n</details> \n "
     # result = "\n### • {} :x:\n".format(scenario_name)
-    result += "• {} :x:\n".format(scenario_switcher(scenario_name),'[ERROR]')
+    result += "\n### ◙ {} :x:\n".format(scenario_switcher(scenario_name),'[ERROR]')
     result += "<details><summary>Advanced details</summary>"
     result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
@@ -149,7 +149,7 @@ def json2markdown(summary_json, verify_json):
     result = ""
     # result += scenarioslist(summary_json) + "\n"
     result += endpoints_set(verify_json) + "\n"
-    result += "### Detailed report: \n"
+    result += "### Scenarios report: \n"
     for scenario, content in summary_json.items():
         result += scenario2markdown(scenario, content)
     return result
