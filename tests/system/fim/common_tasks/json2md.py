@@ -99,8 +99,8 @@ def scenario2markdown(scenario_name, scenario_content):
     if scenario_content['state'] == 'SUCCESS':
         return "### {} :heavy_check_mark:\n***\n".format(scenario_name)
     result = "### {} :x:\n".format(scenario_name)
-    result += '<details><summary>Advanced details</summary> \n'
-    result += "Applicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
+    result += "<details><summary>Advanced details</summary>"
+    result += "\n\nApplicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
         if verification == 'elasticsearch':
             result += "#### - {}".format('Elasticsearch alerts verification')
