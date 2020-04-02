@@ -76,7 +76,7 @@ def host2markdown(name, jsonObject):
         host_data = "    - {} - {} \n".format(name, '[ERROR]')
         host_data += "``` \n"
         for key, value in jsonObject.items():
-            host_data += "    - {} : {} \n".format(key, str(value))
+            host_data += " - {} : {} \n".format(key, str(value))
         host_data += "``` \n"
     return host_data
 
