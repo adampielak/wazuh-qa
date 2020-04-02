@@ -116,7 +116,7 @@ def scenario2markdown(scenario_name, scenario_content):
 
 def get_config(scenario_name):
     config =""
-    with open('../scenarios/'+ scenario_name + '/config/agent_linux_ossec_deb.conf', 'r') as f:
+    with open('/opt/fim_test_results/'+ scenario_name + '/agent_state/Centos_00', 'r') as f:
         lines = f.readlines()
         syscheck_section = False
         for line in lines:
