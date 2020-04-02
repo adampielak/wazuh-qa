@@ -115,7 +115,7 @@ def scenario2markdown(scenario_name, scenario_content):
 
 def get_config(scenario_name):
     config =""
-    with open('../scenarios/'+ scenario_name + '/config/agent_linux_ossec_deb.conf', 'r') as f:
+    with open('/home/jenkins-staging/workspace/Test_system_reporting/qa/tests/system/fim/scenarios/'+ scenario_name + '/config/agent_linux_ossec_deb.conf', 'r') as f:
         lines = f.readlines()
         for line in lines:
             if re.search(r'frequency', line):
