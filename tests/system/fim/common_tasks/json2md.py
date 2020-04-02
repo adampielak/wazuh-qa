@@ -96,9 +96,13 @@ def scenario2markdown(scenario_name, scenario_content):
     """
     Convert a scenario to markdown syntax
     """
+    result = ""
     if scenario_content['state'] == 'SUCCESS':
-        return "### {} :heavy_check_mark:\n\n".format(scenario_name)
-    result = "\n### {} :x:\n".format(scenario_name)
+        result += "<details><summary>Advanced details</summary>"
+        result += "### - {} :heavy_check_mark:\n\n".format(scenario_name)
+        result += "\n\nApplicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
+        return result + "\n</details> \n "
+    result = "\n### - {} :x:\n".format(scenario_name)
     result += "<details><summary>Advanced details</summary>"
     result += "\n\nApplicable configuration: \n  ```xml \n {} \n ``` \n***\n".format(get_config(scenario_name))
     for verification, test_results in scenario_content['errors'].items():
