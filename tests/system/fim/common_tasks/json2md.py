@@ -116,7 +116,7 @@ def scenario2markdown(scenario_name, scenario_content):
 
 def get_config(scenario_name):
     config =""
-    with open('/opt/fim_test_results/'+ scenario_name + '/agent_state/Centos_00', 'r') as f:
+    with open('/opt/fim_test_results/'+ scenario_name + '/agent_state/Centos_00/ossec.conf', 'r') as f:
         lines = f.readlines()
         syscheck_section = False
         for line in lines:
@@ -136,19 +136,7 @@ def get_config(scenario_name):
     return config
 
 
-def get_config(scenario_name):
-    config =""
-    with open('/opt/fim_test_results/'+ scenario_name + '/agent_state/Centos_00/ossec.conf', 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            if re.search(r'frequency', line):
-                config += line
-            if re.search(r'fim_testing', line):
-                config += line
-            if scenario_name == '208_ignore_files':
-                if re.search(r'mp3', line):
-                    config += line
-    return config
+
 
 def json2markdown(summary_json, verify_json):
     result = ""
