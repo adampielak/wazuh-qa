@@ -71,22 +71,22 @@ def endpoints_set(dict):
 def host2markdown(name, jsonObject):
     host_data = ""
     if jsonObject['passed'] == True:
-        return "    - {} - {} \n".format(name, '[✓]')
+        return "    * {} - {} \n".format(name, '[✓]')
     else:
-        host_data = "    - {} - {} \n".format(name, '[ERROR]')
-        host_data += "``` \n"
+        host_data = "    * {} - {} \n".format(name, '[ERROR]')
+        host_data += "    ``` \n"
         for key, value in jsonObject.items():
-            host_data += " - {} : {} \n".format(key, str(value))
-        host_data += "``` \n"
+            host_data += "    - {} : {} \n".format(key, str(value))
+        host_data += "    ``` \n"
     return host_data
 
 def event2markdown(event, hosts, passed):
     result=''
     if passed == True:
-        result = '**  - Event {} - {}**\n'.format(event, '[✓]')
+        result = '  * **Event {} - {}**\n'.format(event, '[✓]')
         return result
     else:
-        result = '**  - Event {} - {}**\n'.format(event, '[ERROR]')
+        result = '  * **Event {} - {}**\n'.format(event, '[ERROR]')
         for host, json_dict in hosts.items():
             result += host2markdown(host, json_dict)
         return result
