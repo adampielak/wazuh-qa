@@ -98,12 +98,10 @@ def scenario2markdown(scenario_name, scenario_content):
     """
     result = ""
     if scenario_content['state'] == 'SUCCESS':
-        # result += "### • {} :heavy_check_mark:\n".format(scenario_name)
         result += "### {} :heavy_check_mark:\n".format(scenario_switcher(scenario_name),'[✓]')
         result += "<details><summary><i>Advanced details</i></summary>\n<br>\n"
         result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n".format(get_config(scenario_name))
         return result + "\n</details> \n "
-    # result = "\n### • {} :x:\n".format(scenario_name)
     result += "\n### {} :x:\n".format(scenario_switcher(scenario_name),'[ERROR]')
     result += "<details><summary><i>Advanced details</i></summary>\n<br>\n"
     result += "\n\nApplicable Syscheck configuration: \n  ```xml \n {} \n ``` \n".format(get_config(scenario_name))
@@ -119,7 +117,7 @@ def scenario2markdown(scenario_name, scenario_content):
             del test_results['passed']
             for event, event_content in test_results.items():
                 result += event2markdown(event, event_content['hosts'], event_content['passed']) + "\n"
-    return result + "\n</details> \n "
+    return result + "\n</details> \n\n"
 
 def get_config(scenario_name):
     config =""
