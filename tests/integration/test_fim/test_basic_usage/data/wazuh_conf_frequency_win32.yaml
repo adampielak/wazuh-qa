@@ -4,16 +4,17 @@
   - ossec_conf
   apply_to_modules:
   - test_basic_usage_new_dirs
-  section: syscheck
-  elements:
-  - disabled:
-      value: 'no'
-  - frequency:
-      value: FREQUENCY
-  - windows_audit_interval:
-      value: WINDOWS_AUDIT_INTERVAL
-  - directories:
-      value: TEST_DIRECTORIES
-      attributes:
-      - check_all: 'yes'
-      - FIM_MODE
+  sections:
+  - section: syscheck
+    elements:
+    - disabled:
+        value: 'no'
+    - frequency:
+        value: FREQUENCY
+    - windows_audit_interval:
+        value: WINDOWS_AUDIT_INTERVAL
+    - directories:
+        value: TEST_DIRECTORIES
+        attributes:
+        - check_all: 'yes'
+        - FIM_MODE
