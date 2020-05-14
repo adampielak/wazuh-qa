@@ -1364,7 +1364,7 @@ def get_fim_mode_param(mode, key='FIM_MODE'):
     """
     metadata = {key.lower(): mode}
     if mode == 'scheduled':
-        return {key: ''}, metadata
+        return None, None
     elif mode == 'realtime' and sys.platform not in _os_excluded_from_rt_wd:
         return {key: {'realtime': 'yes'}}, metadata
     elif mode == 'whodata' and sys.platform not in _os_excluded_from_rt_wd:
