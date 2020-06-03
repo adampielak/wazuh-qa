@@ -14,6 +14,7 @@ class Parameters:
         timeouts = defaultdict(lambda: 10)
         timeouts['linux'] = 5
         timeouts['darwin'] = 5
+        timeouts['win32'] = 25
         self._default_timeout = timeouts[sys.platform]
         self._fim_database_memory = False
         self._gcp_project_id = None
